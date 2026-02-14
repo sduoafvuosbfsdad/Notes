@@ -1,419 +1,610 @@
 import Template from '@/pages/Template.jsx';
 import GlassContainer from '@/components/GlassContainer.jsx';
+import { 
+    ExpandableSection, 
+    TabGroup, 
+    DataGrid, 
+    InfoCard, 
+    ProcessFlow,
+    ComparisonView 
+} from '@/components/widgets';
 import liquefaction from '@/assets/liquefaction-process.png';
+
+// Data definitions for the interactive components
+const impactMatrixData = [
+    { 
+        hazard: 'Ground Shaking', 
+        ecosystems: '●●', 
+        properties: '●●●', 
+        services: '●●●', 
+        fatalities: '●●●',
+        characteristics: 'Physical and direct damage'
+    },
+    { 
+        hazard: 'Liquefaction', 
+        ecosystems: '●●●', 
+        properties: '●●●', 
+        services: '●●', 
+        fatalities: '●●',
+        characteristics: 'Soil becomes fluid-like'
+    },
+    { 
+        hazard: 'Landslides', 
+        ecosystems: '●●●', 
+        properties: '●●●', 
+        services: '●●●', 
+        fatalities: '●●●',
+        characteristics: 'Fast-moving debris buries areas'
+    },
+    { 
+        hazard: 'Tsunamis', 
+        ecosystems: '●●●', 
+        properties: '●●●', 
+        services: '●●●', 
+        fatalities: '●●●',
+        characteristics: 'Salt water flooding, long-distance'
+    },
+    { 
+        hazard: 'Tephra', 
+        ecosystems: '●●●', 
+        properties: '●●', 
+        services: '●●●', 
+        fatalities: '●●',
+        characteristics: 'Widespread pollution, suffocation'
+    }
+];
+
+const impactMatrixColumns = [
+    { 
+        key: 'hazard', 
+        header: 'Hazard Type',
+        sortable: true
+    },
+    { 
+        key: 'ecosystems', 
+        header: '🌿 Ecosystems',
+        sortable: true
+    },
+    { 
+        key: 'properties', 
+        header: '🏢 Properties',
+        sortable: true
+    },
+    { 
+        key: 'services', 
+        header: '⚡ Services',
+        sortable: true
+    },
+    { 
+        key: 'fatalities', 
+        header: '⚠️ Fatalities',
+        sortable: true
+    }
+];
+
+const tsunamiSteps = [
+    { 
+        id: 1,
+        title: "Undersea Earthquake", 
+        description: "Displacement of water creates void",
+        icon: "🌊"
+    },
+    { 
+        id: 2,
+        title: "Water Lifted", 
+        description: "Large waves begin to form",
+        icon: "⬆️"
+    },
+    { 
+        id: 3,
+        title: "High Speed Movement", 
+        description: "Energy transfers efficiently through water",
+        icon: "⚡"
+    },
+    { 
+        id: 4,
+        title: "Shallow Water", 
+        description: "Wave height increases dramatically",
+        icon: "🏔️"
+    }
+];
+
+const caseStudies = [
+    {
+        id: 'japan-2011',
+        title: "Japan 2011",
+        subtitle: "M₍w₎ 9.0 Earthquake & Tsunami",
+        content: (
+            <>
+                <p><strong>Tsunami height:</strong> 40 meters</p>
+                <p><strong>Impact:</strong> Destroyed homes, carried debris inland, flooded inland areas</p>
+                <p><strong>Casualties:</strong> Half of Sendai's population killed</p>
+                <p><strong>Environmental:</strong> Large amounts of trees knocked down</p>
+            </>
+        ),
+        related: ['Tsunamis', 'Ground Shaking']
+    },
+    {
+        id: 'sichuan-2008',
+        title: "Sichuan 2008",
+        subtitle: "M₍w₎ 7.9 Earthquake (汶川地震)",
+        content: (
+            <>
+                <p><strong>Landslides:</strong> 15,000+ triggered</p>
+                <p><strong>Damage:</strong> Many buildings and infrastructure destroyed</p>
+                <p><strong>Casualties:</strong> Approximately 20,000 deaths</p>
+            </>
+        ),
+        related: ['Landslides', 'Ground Shaking']
+    },
+    {
+        id: 'png-2018',
+        title: "Papua New Guinea 2018",
+        subtitle: "M₍w₎ 7.5 Earthquake",
+        content: (
+            <>
+                <p><strong>Chain reaction:</strong> Large quantities of debris entered rivers → flooding → destroyed forests</p>
+                <p><strong>Primary hazard:</strong> Landslides</p>
+            </>
+        ),
+        related: ['Landslides']
+    }
+];
+
+const earthquakeHazardDetails = {
+    groundShaking: {
+        ecosystems: [
+            "Leakages from oil and chemical factories pollute land and water",
+            "Fractures and uprooted trees cause mass deaths, damaging wildlife habitats (roots are damaged)"
+        ],
+        properties: "Weakening of building, bridge, road, and railway foundations, increasing collapse risks and rescue difficulty.",
+        services: "Disruption of water supply, electricity, gas, and communication networks. Underground tubing snaps and breaks.",
+        fatalities: "Collapsed buildings and infrastructure trap people under debris causing casualties."
+    },
+    liquefaction: {
+        ecosystems: [
+            "Trees on liquefied soil sink in (soil becomes more fluidy)",
+            "Liquefied soil enters water bodies, polluting sources and harming aquatic life",
+            "Sewage pipes destroyed, releasing sewage into environment"
+        ],
+        properties: "Weakening of foundations for buildings, bridges, roads, railways - increasing collapse risk.",
+        services: "Similar to ground shaking - services disrupted.",
+        fatalities: "Collapsed buildings trap people under debris."
+    },
+    landslides: {
+        ecosystems: [
+            "Fast-moving debris buries huge areas of forest and wetlands",
+            "River pollution from debris (possibly containing chemicals), killing aquatic life",
+            "Blocked rivers cause floods damaging nearby ecosystems and properties"
+        ],
+        properties: "Debris buries villages and farms, destroying properties.",
+        services: [
+            "Broken piping for water, gas, communication",
+            "Roads and railways blocked by debris"
+        ],
+        fatalities: [
+            "People buried or hit by debris",
+            "Floods from blocked rivers drown people"
+        ]
+    },
+    tsunamis: {
+        ecosystems: [
+            "Flooding of coastal wetlands and habitats (salt water!)",
+            "Debris carried by waves pollutes natural habitats"
+        ],
+        properties: "Fast moving water and debris sweeps away buildings and infrastructure.",
+        services: [
+            "Broken electricity and communication cables",
+            "Roads and railways destroyed, difficult rescue"
+        ],
+        fatalities: [
+            "People drown",
+            "Debris carried by waves kills on impact"
+        ]
+    }
+};
+
+const volcanicHazardDetails = {
+    tephra: {
+        ecosystems: [
+            "Ash dispersed by winds over thousands of kilometers, causing widespread pollution",
+            "Ash suffocates animals, primarily birds",
+            "Ash blinds birds by sticking their eyelids together"
+        ],
+        properties: "Volcanic bombs (up to car size) cause significant damage when they hit buildings.",
+        services: [
+            "Broken electricity and communication cables",
+            "Roads and railways blocked, difficult rescue"
+        ],
+        fatalities: [
+            "Impact from volcanic bombs",
+            "Suffocation from ash inhalation"
+        ]
+    }
+};
 
 export default function Tectonics_2_4() {
     return (
         <Template>
             <GlassContainer>
                 <div id="title">
-                    <h1>2.4 Impacts of Tectonic Hazards on Natural and Human Systems</h1>
-                    <hr></hr>
+                    <h1>2.4 Impacts of Tectonic Hazards</h1>
+                    <p style={{ color: '#94a3b8', marginTop: '0.5rem' }}>
+                        Negative impacts on natural and human systems
+                    </p>
+                    <hr />
                 </div>
 
-                <div id="2.4.1">
-                    <h2>2.4.1 Introduction</h2>
+                {/* Introduction */}
+                <section className="widget-section">
+                    <h3>2.4.1 Overview</h3>
                     <p>
-                        In this chapter, we would be accessing <b>negative impacts</b> of different tectonic hazards on natural and human systems.
-                        We would be exploring the following impacts:
-                        <ul>
-                            <li>Destruction of Ecosystems (Natural)</li>
-                            <li>Destroys properties and infrastructure (Human)</li>
-                            <li>Disrupts services (Human)</li>
-                            <li>Causes injuries and fatalities (Human)</li>
-                        </ul>
+                        This section explores the <b>negative impacts</b> of different tectonic hazards 
+                        on natural and human systems. We'll examine four impact categories across 
+                        earthquake and volcanic hazards.
                     </p>
+                </section>
 
-                    <p>We would be looking into earthquakes then into volcanic eruptions. This section is pretty common sense in my opinion.</p>
-                </div>
+                {/* Interactive Impact Matrix */}
+                <section className="widget-section">
+                    <DataGrid 
+                        columns={impactMatrixColumns}
+                        data={impactMatrixData}
+                        sortable={true}
+                        title="📊 Impact Severity Matrix"
+                        rowDetailRenderer={(row) => (
+                            <div>
+                                <p><strong>Characteristics:</strong> {row.characteristics}</p>
+                                <p style={{ color: '#64748b', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+                                    ● = Low impact | ●● = Medium impact | ●●● = High impact
+                                </p>
+                            </div>
+                        )}
+                    />
+                </section>
 
-                <div id="2.4.2">
-                    <h2>2.4.2 Impact of Ground Shaking</h2>
-                    <p>
-                        As we have introduced earlier, we would be looking into the four different impacts.<br/>
-                    </p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Impact</th>
-                                <th>Explanation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Destroys ecosystems
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            Leakages from oil and chemical factories pollute land and water
-                                        </li>
-                                        <li>
-                                            Fractures and uprooted trees, causing mass deaths of trees, damaging wildlife habitats. (Roots are damaged)
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Destroys properties and infrastructure
-                                </td>
-                                <td>
-                                    Weakening of the foundation of buildings, bridges, roads and railways, increasing risks of collapse.
-                                    Increase in difficulty for rescue and recovery operations.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Disrupts services
-                                </td>
-                                <td>
-                                    Disruption of water supply, electricity, gas, and communication networks.
-                                    The underground tubing snaps and breaks affecting basic services.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Causes injuries and fatalities
-                                </td>
-                                <td>
-                                    Collapsed buildings and infrastructure traps people under debris causing casualties
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p>As we can probably tell, the damages of the ground shaking are usually more physical and direct.</p>
-                </div>
+                {/* Tabbed Content: Earthquakes vs Volcanic */}
+                <section className="widget-section">
+                    <h3 className="widget-section-title">Hazard Types</h3>
+                    <TabGroup 
+                        tabs={[
+                            {
+                                id: 'earthquakes',
+                                label: '🌍 Earthquake Hazards',
+                                icon: '🌍',
+                                content: (
+                                    <div style={{ marginTop: '1rem' }}>
+                                        <ExpandableSection 
+                                            title="2.4.2 Ground Shaking"
+                                            summary="Physical and direct damage to structures"
+                                            icon="🏚️"
+                                            defaultExpanded={true}
+                                        >
+                                            <p>{earthquakeHazardDetails.groundShaking.ecosystems}</p>
+                                            <table>
+                                                <thead>
+                                                    <tr><th>Impact</th><th>Explanation</th></tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>🌿 Ecosystems</td>
+                                                        <td>
+                                                            <ul>
+                                                                {earthquakeHazardDetails.groundShaking.ecosystems.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>🏢 Properties</td>
+                                                        <td>{earthquakeHazardDetails.groundShaking.properties}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>⚡ Services</td>
+                                                        <td>{earthquakeHazardDetails.groundShaking.services}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>⚠️ Fatalities</td>
+                                                        <td>{earthquakeHazardDetails.groundShaking.fatalities}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </ExpandableSection>
 
-                <div id="2.4.3">
-                    <h2>2.4.3 Impact of Soil Liquefaction</h2>
-                    <p>
-                        Liquefaction refers to transforming of the soil to become a thick fluid after violent shaking where it <b>become more saturated, loose soil</b>.
-                    </p>
-                    <img src={ liquefaction } alt="Liquefaction Process"/>
-                    <p>
-                        The shaking of the ground causes the soil to loose its porous structure, turning into something like sand - and I believe we can all understand how sand works.
-                    </p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Impact</th>
-                                <th>Explanation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Destroys ecosystems
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            Trees that grew on liquefied soil sink in (The soil is more "fluidy"), causing mass deaths of trees.
-                                        </li>
-                                        <li>
-                                            Liquefied soil enters water bodies, polluting water sources and harming aquatic life.
-                                        </li>
-                                        <li>
-                                            Soil liquefaction destroys sewage pipes - the sewage then goes into the environment
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Destroys properties and infrastructure
-                                </td>
-                                <td>
-                                    Weakening of the foundation of buildings, bridges, roads and railways, increasing risks of collapse.
-                                    Increase in difficulty for rescue and recovery operations.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Disrupts services
-                                </td>
-                                <td>
-                                    Trees that grew on liquefied soil sink in (The soil is more "fluidy")
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Causes injuries and fatalities
-                                </td>
-                                <td>
-                                    Collapsed buildings and infrastructure traps people under debris causing casualties
-                                </td>
-                            </tr>
-                        </tbody>
+                                        <ExpandableSection 
+                                            title="2.4.3 Soil Liquefaction"
+                                            summary="Soil transforms to fluid-like state"
+                                            icon="🌊"
+                                        >
+                                            <p>
+                                                Liquefaction refers to transforming of the soil to become a thick fluid 
+                                                after violent shaking where it <b>becomes more saturated, loose soil</b>.
+                                            </p>
+                                            <img src={liquefaction} alt="Liquefaction Process" style={{ maxWidth: '300px' }} />
+                                            <p>
+                                                The shaking causes the soil to lose its porous structure, 
+                                                turning into something like sand.
+                                            </p>
+                                            <table>
+                                                <thead>
+                                                    <tr><th>Impact</th><th>Explanation</th></tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>🌿 Ecosystems</td>
+                                                        <td>
+                                                            <ul>
+                                                                {earthquakeHazardDetails.liquefaction.ecosystems.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>🏢 Properties</td>
+                                                        <td>{earthquakeHazardDetails.liquefaction.properties}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>⚡ Services</td>
+                                                        <td>{earthquakeHazardDetails.liquefaction.services}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>⚠️ Fatalities</td>
+                                                        <td>{earthquakeHazardDetails.liquefaction.fatalities}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </ExpandableSection>
 
+                                        <ExpandableSection 
+                                            title="2.4.4 Landslides"
+                                            summary="Fast-moving debris buries everything"
+                                            icon="⛰️"
+                                        >
+                                            <p>
+                                                During violent earthquakes, cracks form on steep slopes, 
+                                                making rocks and soil loose. When loose enough, they slide 
+                                                downslope (not enough friction). Landslides <b>bury things</b> 
+                                                and introduce soil where it shouldn't be.
+                                            </p>
+                                            <table>
+                                                <thead>
+                                                    <tr><th>Impact</th><th>Explanation</th></tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>🌿 Ecosystems</td>
+                                                        <td>
+                                                            <ul>
+                                                                {earthquakeHazardDetails.landslides.ecosystems.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>🏢 Properties</td>
+                                                        <td>{earthquakeHazardDetails.landslides.properties}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>⚡ Services</td>
+                                                        <td>
+                                                            <ul>
+                                                                {earthquakeHazardDetails.landslides.services.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>⚠️ Fatalities</td>
+                                                        <td>
+                                                            <ul>
+                                                                {earthquakeHazardDetails.landslides.fatalities.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </ExpandableSection>
 
-                    </table>
-                </div>
+                                        <ExpandableSection 
+                                            title="2.4.5 Tsunamis"
+                                            summary="Destructive ocean waves from undersea earthquakes"
+                                            icon="🌊"
+                                        >
+                                            <p>
+                                                Tsunami = series of waves caused by underwater earthquake. 
+                                                Water's higher density means energy transfer is more efficient, 
+                                                allowing tsunamis to travel long distances with less energy loss.
+                                            </p>
+                                            
+                                            <h4>Formation Process:</h4>
+                                            <ProcessFlow 
+                                                steps={tsunamiSteps}
+                                                direction="horizontal"
+                                                interactive={true}
+                                            />
+                                            
+                                            <p style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '8px' }}>
+                                                <b>⚠️ Warning Sign:</b> Water recedes from beaches before tsunami arrival. 
+                                                This happens because water fills the void from displacement.
+                                            </p>
 
-                <div id="2.4.4">
-                    <h2>2.4.4 Impact of Landslides</h2>
-                    <p>
-                        During a violent earthquake, cracks form on steep slopes, making the rocks and soil lose.
-                        When the soil is loose enough, they would slide downslope (not enough friction to hold things together).
-                        Essentially, the landslide <b>buries things</b> and introduces soil where it shouldn't be.
-                    </p>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Impact</th>
-                                <th>Explanation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Destroys ecosystems
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            The debris move very fast, and it can bury huge areas of forest and wetlands.
-                                        </li>
-                                        <li>
-                                            River can be polluted by the debris (possibility contains chemicals), killing aquatic lives
-                                        </li>
-                                        <li>
-                                            The large amount of soil may just block the rivers straight up, causing floods that damages nearby ecosystems and properties.
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Destroys properties and infrastructure
-                                </td>
-                                <td>
-                                    Debris bury villages and farms, destroying properties and infrastructure.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Disrupts services
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            It may break piping using to transport water, gas and communication, disrupting supplies.
-                                        </li>
-                                        <li>
-                                            Roads and railways blocked by debris, increasing difficulty for rescue and recovery operations.
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Causes injuries and fatalities
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            Bury or hit people.
-                                        </li>
-                                        <li>
-                                            Floods as a result of blocked rivers drowns people.
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p>
-                        Example: 2018 Papua New Guinea, M<sub>w</sub> 7.5 <br/>
-                        Large quantities of debris entered rivers -> flooding -> destroyed forests
-                    </p>
-                    <p>
-                        Example: 2008 Sichuan (汶川地震), M<sub>w</sub> 7.9<br/>
-                        It triggered over 15k landslides, destroying many buildings and infrastructure.
-                        It caused about 20k deaths.
-                    </p>
-                </div>
+                                            <table>
+                                                <thead>
+                                                    <tr><th>Impact</th><th>Explanation</th></tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>🌿 Ecosystems</td>
+                                                        <td>
+                                                            <ul>
+                                                                {earthquakeHazardDetails.tsunamis.ecosystems.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>🏢 Properties</td>
+                                                        <td>{earthquakeHazardDetails.tsunamis.properties}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>⚡ Services</td>
+                                                        <td>
+                                                            <ul>
+                                                                {earthquakeHazardDetails.tsunamis.services.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>⚠️ Fatalities</td>
+                                                        <td>
+                                                            <ul>
+                                                                {earthquakeHazardDetails.tsunamis.fatalities.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </ExpandableSection>
+                                    </div>
+                                )
+                            },
+                            {
+                                id: 'volcanic',
+                                label: '🌋 Volcanic Hazards',
+                                icon: '🌋',
+                                content: (
+                                    <div style={{ marginTop: '1rem' }}>
+                                        <ExpandableSection 
+                                            title="2.4.6 Tephra"
+                                            summary="Erupted volcanic material and bombs"
+                                            icon="💥"
+                                            defaultExpanded={true}
+                                        >
+                                            <p>
+                                                <b>Tephra</b> = matter ejected from volcano during eruption.<br/>
+                                                <b>Volcanic bombs</b> = molten rock fragments ejected during eruption.
+                                            </p>
+                                            <table>
+                                                <thead>
+                                                    <tr><th>Impact</th><th>Explanation</th></tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>🌿 Ecosystems</td>
+                                                        <td>
+                                                            <ul>
+                                                                {volcanicHazardDetails.tephra.ecosystems.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>🏢 Properties</td>
+                                                        <td>{volcanicHazardDetails.tephra.properties}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>⚡ Services</td>
+                                                        <td>
+                                                            <ul>
+                                                                {volcanicHazardDetails.tephra.services.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>⚠️ Fatalities</td>
+                                                        <td>
+                                                            <ul>
+                                                                {volcanicHazardDetails.tephra.fatalities.map((item, i) => (
+                                                                    <li key={i}>{item}</li>
+                                                                ))}
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </ExpandableSection>
+                                    </div>
+                                )
+                            }
+                        ]}
+                        appearance="pills"
+                    />
+                </section>
 
-                <div id="2.4.5">
-                    <h2>2.4.5 Impact of Tsunamis</h2>
-                    <p>
-                        Tsunami refers to a series of waves caused by an underwater earthquake.
-                        The density of water is higher, the energy transfer is often more efficient.
-                        Therefore, tsunamis can travel a longer distance and loose less energy along the way.
-                    </p>
-                    <p>
-                        Tsunamis are formed when:
-                        <ol>
-                            <li>
-                                Undersea earthquake occurs, leading to displacement of water.
-                            </li>
-                            <li>
-                                Water displaced is lifted higher, forming large waves.
-                            </li>
-                            <li>
-                                The water moves at high speeds, creating destructive waves.
-                            </li>
-                            <li>
-                                When the water gets shallower, the waves increase in height, causing more damage.
-                            </li>
-                        </ol>
-                        It is important to note that the tsunamis require the displacement of water, and the water remains the same.
-                        So the <b>water from the beaches recede from the shores</b>, filling in the void caused by the displacement.
-                        This can be used as a warning for a possible tsunami.
-                    </p>
+                {/* Case Studies */}
+                <section className="widget-section">
+                    <h3 className="widget-section-title">🌍 Real World Examples</h3>
+                    <div className="widget-grid">
+                        {caseStudies.map(study => (
+                            <InfoCard
+                                key={study.id}
+                                variant="expand"
+                                front={{
+                                    title: study.title,
+                                    subtitle: study.subtitle
+                                }}
+                                back={{
+                                    content: study.content,
+                                    related: study.related
+                                }}
+                            />
+                        ))}
+                    </div>
+                </section>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Impact</th>
-                                <th>Explanation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Destroys ecosystems
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            Flooding of costal wetlands and habitats (This is <b>Salt water</b>!!!).
-                                        </li>
-                                        <li>
-                                            Debris carried by waves are polluting natural habitats.
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Destroys properties and infrastructure
-                                </td>
-                                <td>
-                                    Fast moving water and debris sweeps away buildings and infrastructure
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Disrupts services
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            Break electricity and communication cables
-                                        </li>
-                                        <li>
-                                            Breaks roads and railways, difficult to rescue people or supply emergency services.
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Causes injuries and fatalities
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            Drowns people
-                                        </li>
-                                        <li>
-                                            Debris carried by waves kill people when they hit
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p>
-                        Example: 2011 Japan, M<sub>w</sub> 9.0<br/>
-                        Tsunami of 40m in height -> destroyed homes and carried debris inland. The inland area was flooded.
-                        Half of sendai's population was killed. Large amounts of trees knocked down.
-                    </p>
-                </div>
+                {/* Hazard Comparison */}
+                <section className="widget-section">
+                    <h3 className="widget-section-title">⚖️ Hazard Comparison</h3>
+                    <ComparisonView 
+                        mode="side-by-side"
+                        itemA={{
+                            title: "Ground Shaking",
+                            icon: "🏚️",
+                            content: (
+                                <p>Direct physical damage from seismic waves. Affects foundations and structural integrity.</p>
+                            ),
+                            meta: {
+                                speed: "Instant",
+                                range: "Local",
+                                duration: "Seconds",
+                                warning: "None"
+                            }
+                        }}
+                        itemB={{
+                            title: "Tsunami",
+                            icon: "🌊",
+                            content: (
+                                <p>Ocean waves traveling at high speeds, causing flooding and destruction far from source.</p>
+                            ),
+                            meta: {
+                                speed: "~800 km/h",
+                                range: "Trans-oceanic",
+                                duration: "Hours",
+                                warning: "Minutes to hours"
+                            }
+                        }}
+                        showDifferences={true}
+                    />
+                </section>
 
-                <hr/>
-                <small>^^^ The above content was on earthquakes and below is on volcanic eruptions.</small>
-
-                <div id="2.4.6">
-                    <h2>2.4.6 Impacts of Tephra </h2>
-                    <p>
-                        Tephra refers to matter that was ejected from a volcano during an eruption.<br/>
-                        Volcanic bombs refer to molten rock fragments that are ejected from a volcano during an eruption.
-                    </p>
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Impact</th>
-                                <th>Explanation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Destroys ecosystems
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            Ash is dispersed by winds over thousands of kilometers, causing widespread polution
-                                        </li>
-                                        <li>
-                                            Ashes can suffocate animals, primarily birds
-                                        </li>
-                                        <li>
-                                            Blinds birds by sticking their eyelids together
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Destroys properties and infrastructure
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>Volcanic bombs can reach sizes up to a car, causing significant damage to buildings and infrastructure when hit</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Disrupts services
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            Break electricity and communication cables
-                                        </li>
-                                        <li>
-                                            Breaks roads and railways, difficult to rescue people or supply emergency services.
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Causes injuries and fatalities
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            Drowns people
-                                        </li>
-                                        <li>
-                                            Debris carried by waves kill people when they hit
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
+                <hr />
+                <small style={{ color: '#64748b' }}>
+                    Use the interactive elements above to explore each hazard type in detail.
+                </small>
             </GlassContainer>
         </Template>
     );
