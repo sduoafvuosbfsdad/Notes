@@ -2,6 +2,7 @@ import Template from '@/pages/Template';
 import GlassContainer from "@/components/GlassContainer.jsx";
 import Latex from "@/components/Latex.jsx";
 import BlockMath from "@/components/BlockMath.jsx";
+import ReactivityExperiment from "@/components/ReactivityExperiment.jsx";
 
 // Metal data for reference (static rendering below)
 // K, Na, Ca, Mg, Al, C, Zn, Fe, Sn, Pb, H, Cu, Ag
@@ -91,18 +92,22 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
-        height: '80px',
+        height: '45px',
         margin: '0 0.25rem',
+        marginBottom: '2rem',
     },
     thresholdLine: {
         width: '3px',
         height: '60px',
         background: 'linear-gradient(to bottom, #ff6b6b, #feca57)',
         borderRadius: '2px',
+        position: 'absolute',
+        top: '50%',
+        transform: 'translateY(-50%)',
     },
     thresholdLabel: {
         position: 'absolute',
-        top: '-20px',
+        top: '-24px',
         fontSize: '0.7rem',
         color: '#feca57',
         fontWeight: 'bold',
@@ -129,6 +134,7 @@ export default function ReactivitySeries() {
                         在化学中，金属的活动性指的是金属失去电子并形成阳离子的倾向。更倾向于失去电子的金属拥有更高的活动性。
                     </p>
 
+                    {/* Note: Tin (Sn) and Aluminium (Al) are not required in the reactivity series */}
                     <div id="ReactivitySeries" style={styles.container}>
                         <div style={styles.seriesContainer}>
                             {/* Potassium */}
@@ -151,11 +157,6 @@ export default function ReactivitySeries() {
                                 <div style={styles.symbol}>Mg</div>
                                 <div style={styles.name}>Magnesium<br/>(镁)</div>
                             </div>
-                            {/* Aluminium */}
-                            <div style={styles.metalItem}>
-                                <div style={styles.symbol}>Al</div>
-                                <div style={styles.name}>Aluminium<br/>(铝)</div>
-                            </div>
                             {/* Carbon (Marker) */}
                             <div style={styles.metalItem}>
                                 <div style={styles.symbolMarker}>C</div>
@@ -175,11 +176,6 @@ export default function ReactivitySeries() {
                             <div style={styles.thresholdContainer}>
                                 <div style={styles.thresholdLine}></div>
                                 <div style={styles.thresholdLabel}>Steam reaction threshold</div>
-                            </div>
-                            {/* Tin */}
-                            <div style={styles.metalItem}>
-                                <div style={styles.symbol}>Sn</div>
-                                <div style={styles.name}>Tin<br/>(锡)</div>
                             </div>
                             {/* Lead */}
                             <div style={styles.metalItem}>
@@ -229,6 +225,9 @@ export default function ReactivitySeries() {
 
                         </ol>
                     </p>
+
+                    {/* Interactive Experiment Section */}
+                    <ReactivityExperiment />
                 </div>
             </GlassContainer>
         </Template>
