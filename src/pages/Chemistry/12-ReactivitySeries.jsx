@@ -214,6 +214,7 @@ export default function ReactivitySeries() {
                                 Metals + Cold water 金属 + 冷水
                                 <div id="Reaction-of-metals-with-cold-water">
                                     <BlockMath>Na(s) + H_2O(l) → NaOH(aq) + H_2(g)</BlockMath>
+                                    <span>Metals more reactive than carbon</span>
                                 </div>
                             </li>
                             <li>
@@ -222,13 +223,25 @@ export default function ReactivitySeries() {
                                     <BlockMath>Zn(s) + H_2O(g) → ZnO(s) + H_2(g)</BlockMath>
                                 </div>
                             </li>
-
+                            <li>
+                                Metals + Acid 金属 + 酸
+                                <div id="Reaction-of-metals-with-acid">
+                                    <BlockMath>Fe(s) + HCl(aq) → FeCl_2(s) + H_2(g)</BlockMath>
+                                </div>
+                            </li>
                         </ol>
                     </p>
-
-                    {/* Interactive Experiment Section */}
-                    <ReactivityExperiment />
                 </div>
+                <div id="12.2">
+                    <h2>12.2 Impact of reactivity of metals on oxidisation 金属活动性对于氧化反应烈度的影响</h2>
+                    <p>
+                        The higher the metal is in the reactivity series, the more reactive it is, therefore it reacts more vigorously.
+
+                    </p>
+                    <ReactivityExperiment />
+
+                </div>
+
             </GlassContainer>
         </Template>
     )

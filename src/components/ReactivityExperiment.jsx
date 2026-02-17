@@ -13,6 +13,18 @@ const METALS = [
     { symbol: 'Ag', name: 'Silver', chinese: '银', reactivity: 'none' },
 ];
 
+// Reaction info for table display
+const REACTION_TABLE = [
+    { element: 'Potassium', water: 'Reacts very violently', steam: 'Reacts explosively', acid: 'Reacts explosively' },
+    { element: 'Sodium', water: 'Reacts violently', steam: 'Reacts explosively', acid: 'Reacts explosively' },
+    { element: 'Calcium', water: 'Reacts readily', steam: 'Reacts explosively', acid: 'Reacts violently' },
+    { element: 'Magnesium', water: 'Reacts very slowly', steam: 'Reacts violently', acid: 'Reacts rapidly' },
+    { element: 'Zinc', water: 'N/A', steam: 'Reacts violently', acid: 'Reacts rapidly' },
+    { element: 'Iron', water: 'N/A', steam: 'Reacts slowly', acid: 'Reacts slowly' },
+    { element: 'Lead', water: 'N/A', steam: 'N/A', acid: 'Reacts with HNO₃ only (protective layer forms)' },
+    { element: 'Copper - Silver', water: 'N/A', steam: 'N/A', acid: 'N/A' },
+];
+
 const REAGENTS = [
     { id: 'water', name: 'Cold Water', chinese: '冷水', icon: '💧' },
     { id: 'steam', name: 'Steam', chinese: '蒸汽', icon: '☁️' },
@@ -23,87 +35,144 @@ const REAGENTS = [
 const REACTIONS = {
     'K-water': {
         equation: '2K(s) + 2H_2O(l) \\rightarrow 2KOH(aq) + H_2(g)',
-        description: 'Violent reaction with explosion!',
-        chineseDesc: '剧烈反应并爆炸！',
+        description: 'Reacts very violently with explosion!',
+        chineseDesc: '非常剧烈反应并爆炸！',
+        explosive: true,
+        bubbleIntensity: 3,
+        shakeIntensity: 3,
+    },
+    'K-steam': {
+        equation: '2K(s) + 2H_2O(g) \\rightarrow 2KOH(aq) + H_2(g)',
+        description: 'Reacts explosively!',
+        chineseDesc: '爆炸性反应！',
         explosive: true,
         bubbleIntensity: 3,
         shakeIntensity: 3,
     },
     'Na-water': {
         equation: '2Na(s) + 2H_2O(l) \\rightarrow 2NaOH(aq) + H_2(g)',
-        description: 'Violent reaction with explosion!',
+        description: 'Reacts violently with explosion!',
         chineseDesc: '剧烈反应并爆炸！',
+        explosive: true,
+        bubbleIntensity: 3,
+        shakeIntensity: 3,
+    },
+    'Na-steam': {
+        equation: '2Na(s) + 2H_2O(g) \\rightarrow 2NaOH(aq) + H_2(g)',
+        description: 'Reacts explosively!',
+        chineseDesc: '爆炸性反应！',
         explosive: true,
         bubbleIntensity: 3,
         shakeIntensity: 3,
     },
     'Ca-water': {
         equation: 'Ca(s) + 2H_2O(l) \\rightarrow Ca(OH)_2(aq) + H_2(g)',
-        description: 'Reacts vigorously with bubbles',
-        chineseDesc: '剧烈反应并产生气泡',
+        description: 'Reacts readily',
+        chineseDesc: '容易反应',
         explosive: false,
         bubbleIntensity: 3,
         shakeIntensity: 2,
     },
+    'Ca-steam': {
+        equation: 'Ca(s) + 2H_2O(g) \\rightarrow Ca(OH)_2(aq) + H_2(g)',
+        description: 'Reacts explosively!',
+        chineseDesc: '爆炸性反应！',
+        explosive: true,
+        bubbleIntensity: 3,
+        shakeIntensity: 3,
+    },
     'Mg-water': {
-        equation: 'Mg(s) + 2H_2O(l) \\rightarrow Mg(OH)_2(aq) + H_2(g)\\text{ (Very slow)}',
-        description: 'Reacts very slowly with cold water',
-        chineseDesc: '与冷水反应很慢',
+        equation: 'Mg(s) + 2H_2O(l) \\rightarrow Mg(OH)_2(aq) + H_2(g)',
+        description: 'Reacts very slowly',
+        chineseDesc: '反应很慢',
         explosive: false,
         bubbleIntensity: 1,
         shakeIntensity: 0,
     },
     'Mg-steam': {
         equation: 'Mg(s) + H_2O(g) \\rightarrow MgO(s) + H_2(g)',
-        description: 'Reacts vigorously with steam',
-        chineseDesc: '与蒸汽剧烈反应',
+        description: 'Reacts violently',
+        chineseDesc: '剧烈反应',
         explosive: false,
         bubbleIntensity: 3,
         shakeIntensity: 2,
     },
     'Zn-steam': {
         equation: 'Zn(s) + H_2O(g) \\rightarrow ZnO(s) + H_2(g)',
-        description: 'Reacts with steam when heated',
-        chineseDesc: '加热时与蒸汽反应',
+        description: 'Reacts violently',
+        chineseDesc: '剧烈反应',
         explosive: false,
-        bubbleIntensity: 2,
-        shakeIntensity: 1,
+        bubbleIntensity: 3,
+        shakeIntensity: 2,
     },
     'Zn-hcl': {
         equation: 'Zn(s) + 2HCl(aq) \\rightarrow ZnCl_2(aq) + H_2(g)',
-        description: 'Reacts with bubbles',
-        chineseDesc: '反应并产生气泡',
+        description: 'Reacts rapidly',
+        chineseDesc: '快速反应',
         explosive: false,
-        bubbleIntensity: 2,
-        shakeIntensity: 1,
+        bubbleIntensity: 3,
+        shakeIntensity: 2,
     },
     'Fe-steam': {
         equation: '3Fe(s) + 4H_2O(g) \\rightarrow Fe_3O_4(s) + 4H_2(g)',
-        description: 'Reacts with steam when heated',
-        chineseDesc: '加热时与蒸汽反应',
+        description: 'Reacts slowly',
+        chineseDesc: '缓慢反应',
         explosive: false,
-        bubbleIntensity: 2,
-        shakeIntensity: 1,
+        bubbleIntensity: 1,
+        shakeIntensity: 0,
     },
     'Fe-hcl': {
         equation: 'Fe(s) + 2HCl(aq) \\rightarrow FeCl_2(aq) + H_2(g)',
-        description: 'Reacts slowly with bubbles',
-        chineseDesc: '缓慢反应并产生气泡',
+        description: 'Reacts slowly',
+        chineseDesc: '缓慢反应',
         explosive: false,
         bubbleIntensity: 1,
         shakeIntensity: 0,
     },
     'Pb-hcl': {
-        equation: 'Pb(s) + 2HCl(aq) \\rightarrow PbCl_2(aq) + H_2(g)\\text{ (Very slow)}',
-        description: 'Reacts very slowly',
-        chineseDesc: '反应非常缓慢',
+        equation: '\\text{Reacts with HNO}_3\\text{ only}',
+        description: 'Reacts with HNO₃ only (protective layer forms)',
+        chineseDesc: '仅与硝酸反应（形成保护层）',
         explosive: false,
-        bubbleIntensity: 1,
+        bubbleIntensity: 0,
         shakeIntensity: 0,
+    },
+    // Acid reactions for reactive metals
+    'K-hcl': {
+        equation: '2K(s) + 2HCl(aq) \\rightarrow 2KCl(aq) + H_2(g)',
+        description: 'Reacts explosively!',
+        chineseDesc: '爆炸性反应！',
+        explosive: true,
+        bubbleIntensity: 3,
+        shakeIntensity: 3,
+    },
+    'Na-hcl': {
+        equation: '2Na(s) + 2HCl(aq) \\rightarrow 2NaCl(aq) + H_2(g)',
+        description: 'Reacts explosively!',
+        chineseDesc: '爆炸性反应！',
+        explosive: true,
+        bubbleIntensity: 3,
+        shakeIntensity: 3,
+    },
+    'Ca-hcl': {
+        equation: 'Ca(s) + 2HCl(aq) \\rightarrow CaCl_2(aq) + H_2(g)',
+        description: 'Reacts violently',
+        chineseDesc: '剧烈反应',
+        explosive: false,
+        bubbleIntensity: 3,
+        shakeIntensity: 2,
+    },
+    'Mg-hcl': {
+        equation: 'Mg(s) + 2HCl(aq) \\rightarrow MgCl_2(aq) + H_2(g)',
+        description: 'Reacts rapidly',
+        chineseDesc: '快速反应',
+        explosive: false,
+        bubbleIntensity: 3,
+        shakeIntensity: 2,
     },
     'no-reaction': {
         equation: '\\text{No reaction}',
-        description: 'No reaction occurs',
+        description: 'No reaction',
         chineseDesc: '没有反应',
         explosive: false,
         bubbleIntensity: 0,
@@ -115,20 +184,19 @@ function getReactionKey(metal, reagent) {
     const key = `${metal}-${reagent}`;
     if (REACTIONS[key]) return key;
     
+    // No reaction cases based on the table
     if (reagent === 'water') {
         if (['Zn', 'Fe', 'Pb', 'Cu', 'Ag'].includes(metal)) {
             return 'no-reaction';
         }
     }
     if (reagent === 'steam') {
-        if (['K', 'Na', 'Ca', 'Pb', 'Cu', 'Ag'].includes(metal)) {
+        if (['Pb', 'Cu', 'Ag'].includes(metal)) {
             return 'no-reaction';
         }
     }
     if (reagent === 'hcl') {
-        if (['K', 'Na', 'Ca', 'Mg'].includes(metal)) {
-            return 'no-reaction';
-        }
+        // Cu and Ag don't react with HCl
         if (['Cu', 'Ag'].includes(metal)) {
             return 'no-reaction';
         }
@@ -220,6 +288,8 @@ export default function ReactivityExperiment() {
         setMetalDropped(false);
         setMetalDissolved(false);
     }, []);
+
+
 
     const styles = {
         container: {
@@ -336,9 +406,22 @@ export default function ReactivityExperiment() {
             height: selectedReagent ? '70%' : '0%',
             background: selectedReagent?.id === 'hcl' 
                 ? 'rgba(255, 255, 200, 0.6)' 
+                : selectedReagent?.id === 'steam'
+                ? 'linear-gradient(to top, rgba(200, 200, 200, 0.3) 0%, rgba(240, 240, 240, 0.1) 50%, transparent 100%)'
                 : 'rgba(100, 180, 255, 0.5)',
             transition: 'height 0.5s ease',
             borderRadius: '0 0 16px 16px',
+        },
+        steamEffect: {
+            position: 'absolute',
+            top: '-20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '80px',
+            height: '40px',
+            opacity: selectedReagent?.id === 'steam' && isReacting ? 1 : 0,
+            transition: 'opacity 0.3s ease',
+            pointerEvents: 'none',
         },
         metalSample: {
             position: 'absolute',
@@ -411,6 +494,7 @@ export default function ReactivityExperiment() {
             animation: 'overlay-fade-in 0.3s ease-out',
             padding: '2rem',
         },
+
         overlayTitle: {
             fontSize: '1.2rem',
             color: '#feca57',
@@ -553,6 +637,14 @@ export default function ReactivityExperiment() {
                     )}
                     {renderBubbles()}
                     {explosion && <div style={styles.explosion} />}
+                    {/* Steam effect */}
+                    {selectedReagent?.id === 'steam' && (
+                        <div style={styles.steamEffect}>
+                            <div className="steam-wisp" style={{ left: '20%', animationDelay: '0s' }} />
+                            <div className="steam-wisp" style={{ left: '50%', animationDelay: '0.3s' }} />
+                            <div className="steam-wisp" style={{ left: '80%', animationDelay: '0.6s' }} />
+                        </div>
+                    )}
                 </div>
 
                 {!isReacting ? (
@@ -587,6 +679,68 @@ export default function ReactivityExperiment() {
                 )}
             </div>
 
+            {/* Reaction Table */}
+            <div style={{marginTop: '2rem', overflowX: 'auto'}}>
+                <h4 style={{...styles.sectionTitle, marginTop: '1.5rem', marginBottom: '0.75rem'}}>
+                    📊 Reactivity Summary Table 反应性总结表
+                </h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Element</th>
+                            <th>Cold Water</th>
+                            <th>Steam</th>
+                            <th>Acid</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Potassium</td>
+                            <td>Reacts very violently</td>
+                            <td rowSpan="3">Reacts explosively</td>
+                            <td rowSpan="2">Reacts explosively</td>
+                        </tr>
+                        <tr>
+                            <td>Sodium</td>
+                            <td>Reacts violently</td>
+                        </tr>
+                        <tr>
+                            <td>Calcium</td>
+                            <td>Reacts readily</td>
+                            <td>Reacts violently</td>
+                        </tr>
+                        <tr>
+                            <td>Magnesium</td>
+                            <td>Reacts very slowly</td>
+                            <td rowSpan="2">Reacts violently</td>
+                            <td rowSpan="2">Reacts rapidly</td>
+                        </tr>
+                        <tr>
+                            <td>Zinc</td>
+                            <td>N/A</td>
+                        </tr>
+                        <tr>
+                            <td>Iron</td>
+                            <td>N/A</td>
+                            <td>Reacts slowly</td>
+                            <td>Reacts slowly</td>
+                        </tr>
+                        <tr>
+                            <td>Lead</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>Reacts with HNO₃ only</td>
+                        </tr>
+                        <tr>
+                            <td>Copper - Silver</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <style>{`
                 .bubble {
                     animation-name: bubble-rise-up;
@@ -606,6 +760,29 @@ export default function ReactivityExperiment() {
                     }
                     100% {
                         transform: translateY(var(--travel-height, -150px)) scale(0.4);
+                        opacity: 0;
+                    }
+                }
+                .steam-wisp {
+                    position: absolute;
+                    bottom: 0;
+                    width: 20px;
+                    height: 60px;
+                    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
+                    border-radius: 50%;
+                    animation: steam-rise 2s ease-out infinite;
+                    filter: blur(4px);
+                }
+                @keyframes steam-rise {
+                    0% {
+                        transform: translateY(0) scaleX(1);
+                        opacity: 0.8;
+                    }
+                    50% {
+                        opacity: 0.4;
+                    }
+                    100% {
+                        transform: translateY(-80px) scaleX(2);
                         opacity: 0;
                     }
                 }
