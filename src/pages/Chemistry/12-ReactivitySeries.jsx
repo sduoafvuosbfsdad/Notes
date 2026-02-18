@@ -333,10 +333,51 @@ export default function ReactivitySeries() {
                     <div id="12.3.2">
                         <h3>12.3.2 Metal displacement reactions 金属置换反应</h3>
                         <p>A more reactive metal displaces another metal from its compound. 活动性较强的金属能把活动性较弱的金属从其盐溶液中置换出来。</p>
-
+                        <BlockMath>Zn(s) + CuO(s) → ZnO(s) + Cu(s)</BlockMath>
+                        <p>
+                            During the reaction, the copper from copper oxide is reduced to form copper metal.
+                            Therefore, the Zinc is acting as the reducent agent here.
+                        </p>
                     </div>
                 </div>
 
+                <div id="12.4">
+                    <h2>12.4 Impact of reactivity of metals on the decomposition of carbonates</h2>
+                    <p>The more reactive a metal is, the more thermally stable its carbon is and therefore the more difficult to decompose it by heat.</p>
+                    <BlockMath>CaCO_3(s) → CaO(s) + CO_2(g)</BlockMath>
+                    <span>Metal carbonates with metals that are less reactive than sodium would decompose under heating to form a metal oxide and carbon dioxide.</span>
+                    <BlockMath>2Ag_2CO_3(s) → 4Ag(s) + O_2(g) + 2CO_2(g)</BlockMath>
+                    <span>Due to how unreactive silver is, silver carbonate forms metal, oxygen and carbon dioxide during decomposition.</span>
+                </div>
+
+                <div id="12.5">
+                    <h2>12.5 Extraction of metals</h2>
+                    <p>
+                        Metals do not exist purely. So, we need to extract them from their ores for industrial use.<br/>
+                        There are usually 2 methods to do so.
+                        <ol>
+                            <li>Electrolysis (Reactivity > Carbon)</li>
+                            <li>Reduction with Carbon (Reactivity {"<"} Carbon)</li>
+                        </ol>
+                    </p>
+                </div>
+
+                <div id="12.6">
+                    <h2>12.6 Rusting</h2>
+                    <p>Rusting usually refers to the corrosion of iron over time. It is due to iron oxidising when exposed to oxygen and water.</p>
+                    <div id="12.6.1">
+                        <h3>12.6.1 Rust prevention methods</h3>
+                        <p>There are two common rust prevention methods, using a protective layer and sacrificial protection.</p>
+                        <ol>
+                            <li>Using a protective layer</li>
+                            A protective layer refers to a barrier to prevent iron/steel in coming into contact with oxygen and water.
+                            The protective layers can be created through panting, oiling, plastic coating and electroplating.
+                            <li>Sacrificial protection</li>
+                            This method involves placing a more reactive metal to oxidise first, protecting the less reactive metal.
+                        </ol>
+
+                    </div>
+                </div>
             </GlassContainer>
         </Template>
     )
