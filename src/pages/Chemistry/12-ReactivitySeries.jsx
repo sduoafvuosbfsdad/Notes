@@ -235,11 +235,106 @@ export default function ReactivitySeries() {
                 <div id="12.2">
                     <h2>12.2 Impact of reactivity of metals on oxidisation 金属活动性对于氧化反应烈度的影响</h2>
                     <p>
-                        The higher the metal is in the reactivity series, the more reactive it is, therefore it reacts more vigorously.
-
+                        The higher the metal is in the reactivity series, the more reactive it is, therefore it reacts more vigorously.=
                     </p>
                     <ReactivityExperiment />
+                    
+                    {/* Reactivity Summary Table */}
+                    <div style={{marginTop: '2rem', overflowX: 'auto'}}>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Element</th>
+                                    <th>Cold Water</th>
+                                    <th>Steam</th>
+                                    <th>Acid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Potassium</td>
+                                    <td>Reacts very violently</td>
+                                    <td rowSpan="3">Reacts explosively</td>
+                                    <td rowSpan="2">Reacts explosively</td>
+                                </tr>
+                                <tr>
+                                    <td>Sodium</td>
+                                    <td>Reacts violently</td>
+                                </tr>
+                                <tr>
+                                    <td>Calcium</td>
+                                    <td>Reacts readily</td>
+                                    <td>Reacts violently</td>
+                                </tr>
+                                <tr>
+                                    <td>Magnesium</td>
+                                    <td>Reacts very slowly</td>
+                                    <td rowSpan="2">Reacts violently</td>
+                                    <td rowSpan="2">Reacts rapidly</td>
+                                </tr>
+                                <tr>
+                                    <td>Zinc</td>
+                                    <td>N/A</td>
+                                </tr>
+                                <tr>
+                                    <td>Iron</td>
+                                    <td>N/A</td>
+                                    <td>Reacts slowly</td>
+                                    <td>Reacts slowly</td>
+                                </tr>
+                                <tr>
+                                    <td>Lead</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>Reacts with HNO₃ only</td>
+                                </tr>
+                                <tr>
+                                    <td>Copper - Silver</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                    <td>N/A</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
+                <div id="12.3">
+                    <h2>12.3 Impact of reactivity of metals on the reduction of metal oxides 金属活动性对于还原氧化金属的影响</h2>
+                    <p>The more reactive a metal is, the more stable its compound is and the more difficult to reduce the metal oxide</p>
+                    <div id="12.3.1">
+                        <h3>12.3.1 Reduction of Metal Oxides with Carbon and Hydrogen</h3>
+                        <p>
+                            Carbon would reduce metal oxides that have a lower reactivity than carbon.
+                            Hydrogen would reduce metal oxides that have a lower reactivity than Zinc.
+                            Only Silver can be reduced by heating.
+                        </p>
+
+                        <ol>
+                            <li>
+                                Reduction with carbon - Produces metal and oxygen
+                                <BlockMath>2ZnO(s) + C(s) → 2Zn(s) + O_2(g)</BlockMath>
+                            </li>
+                            <li>
+                                Reduction with hydrogen - Produces metal and hydrogen
+                                <p>
+                                    <BlockMath>CuO(s) + H_2(g) → Cu(s) + H_2O(g)</BlockMath>
+                                </p>
+                            </li>
+                            <li>
+                                Reduction by heating - Produces metal and oxygen
+                                <br/>
+                                <small className="red">Applies to Silver only!!!</small>
+                                <BlockMath>2Ag_2O(s) → 4Ag(s) + O_2(g)</BlockMath>
+                            </li>
+                        </ol>
+
+                    </div>
+                    <div id="12.3.2">
+                        <h3>12.3.2 Metal displacement reactions 金属置换反应</h3>
+                        <p>A more reactive metal displaces another metal from its compound. 活动性较强的金属能把活动性较弱的金属从其盐溶液中置换出来。</p>
+
+                    </div>
                 </div>
 
             </GlassContainer>

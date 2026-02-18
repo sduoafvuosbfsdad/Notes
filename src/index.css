@@ -226,9 +226,11 @@ main {
   color: #e2e8f0;
   font-size: 1.4rem;
   font-weight: 600;
-  margin-top: 0.75rem;
-  margin-bottom: 0.25rem;
+  margin: 0;
+  padding: 0;
 }
+
+
 
 .markdown-content p {
   margin-bottom: 1.25rem;
@@ -549,4 +551,13 @@ img {
 b {
   color: red;
   font-weight: bold;
+}
+
+.red {
+  color: red;
+}
+
+h3 {
+  padding-bottom: 0.1rem;
+  margin-bottom:0.1rem;
 }

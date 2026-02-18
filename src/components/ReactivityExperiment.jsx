@@ -225,6 +225,7 @@ function getShakeAnimation(intensity) {
 }
 
 export default function ReactivityExperiment() {
+    const [isExpanded, setIsExpanded] = useState(false);
     const [selectedMetal, setSelectedMetal] = useState(null);
     const [selectedReagent, setSelectedReagent] = useState(null);
     const [isReacting, setIsReacting] = useState(false);
@@ -235,6 +236,10 @@ export default function ReactivityExperiment() {
     const [shakeWidgets, setShakeWidgets] = useState(false);
     const [metalDropped, setMetalDropped] = useState(false);
     const [metalDissolved, setMetalDissolved] = useState(false);
+
+    const toggleExpand = useCallback(() => {
+        setIsExpanded(!isExpanded);
+    }, [isExpanded]);
 
     const startExperiment = useCallback(() => {
         if (!selectedMetal || !selectedReagent) return;
@@ -294,11 +299,43 @@ export default function ReactivityExperiment() {
     const styles = {
         container: {
             margin: '2rem 0',
-            padding: '1.5rem',
             background: 'rgba(255, 255, 255, 0.05)',
             borderRadius: '16px',
             border: '1px solid rgba(255, 255, 255, 0.1)',
             animation: shakeWidgets ? getShakeAnimation(reaction?.shakeIntensity || 0) : 'none',
+            overflow: 'hidden',
+        },
+        header: {
+            padding: '1rem 1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            cursor: 'pointer',
+            background: 'rgba(255, 255, 255, 0.03)',
+            transition: 'background 0.2s ease',
+        },
+        headerHover: {
+            background: 'rgba(255, 255, 255, 0.08)',
+        },
+        headerTitle: {
+            fontSize: '1.3rem',
+            color: '#fff',
+            margin: 0,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
+        },
+        expandIcon: {
+            fontSize: '1.2rem',
+            color: 'rgba(255, 255, 255, 0.6)',
+            transition: 'transform 0.3s ease',
+            transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+        },
+        content: {
+            maxHeight: isExpanded ? '2000px' : '0',
+            overflow: 'hidden',
+            transition: 'max-height 0.4s ease-out, padding 0.3s ease',
+            padding: isExpanded ? '0 1.5rem 1.5rem 1.5rem' : '0 1.5rem',
         },
         title: {
             fontSize: '1.5rem',
@@ -558,187 +595,141 @@ export default function ReactivityExperiment() {
 
     return (
         <div style={styles.container}>
-            <h3 style={styles.title}>🧪 Reactivity Experiment 反应性实验</h3>
-            <p style={styles.subtitle}>
-                Select a metal and a reagent to observe the reaction<br/>
-                选择金属和试剂来观察反应
-            </p>
-
-            {/* Metal Selection */}
-            <div style={styles.section}>
-                <h4 style={styles.sectionTitle}>1. Select Metal 选择金属</h4>
-                <div style={styles.grid}>
-                    {METALS.map((metal) => (
-                        <button
-                            key={metal.symbol}
-                            style={{
-                                ...styles.metalButton,
-                                ...(selectedMetal?.symbol === metal.symbol ? styles.metalButtonSelected : {}),
-                            }}
-                            onClick={() => {
-                                setSelectedMetal(metal);
-                                setIsReacting(false);
-                                setShowResult(false);
-                                setBubbles(false);
-                                setMetalDropped(false);
-                                setMetalDissolved(false);
-                            }}
-                        >
-                            <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{metal.symbol}</div>
-                            <div style={{ fontSize: '0.7rem' }}>{metal.name}</div>
-                        </button>
-                    ))}
-                </div>
+            {/* Collapsible Header */}
+            <div 
+                style={styles.header} 
+                onClick={toggleExpand}
+                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)'}
+            >
+                <h3 style={styles.headerTitle}>
+                    🧪 Reactivity Experiment 反应性实验
+                </h3>
+                <span style={styles.expandIcon}>▼</span>
             </div>
 
-            {/* Reagent Selection */}
-            <div style={styles.section}>
-                <h4 style={styles.sectionTitle}>2. Select Reagent 选择试剂</h4>
-                <div style={styles.reagentGrid}>
-                    {REAGENTS.map((reagent) => (
-                        <button
-                            key={reagent.id}
-                            style={{
-                                ...styles.reagentButton,
-                                ...(selectedReagent?.id === reagent.id ? styles.reagentButtonSelected : {}),
-                            }}
-                            onClick={() => {
-                                setSelectedReagent(reagent);
-                                setIsReacting(false);
-                                setShowResult(false);
-                                setBubbles(false);
-                                setMetalDropped(false);
-                                setMetalDissolved(false);
-                            }}
-                        >
-                            <span style={styles.reagentIcon}>{reagent.icon}</span>
-                            <div>
-                                <div style={{ fontWeight: 'bold' }}>{reagent.name}</div>
-                                <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>{reagent.chinese}</div>
+            {/* Collapsible Content */}
+            <div style={styles.content}>
+                <p style={styles.subtitle}>
+                    Select a metal and a reagent to observe the reaction<br/>
+                    选择金属和试剂来观察反应
+                </p>
+
+                {/* Metal Selection */}
+                <div style={styles.section}>
+                    <h4 style={styles.sectionTitle}>1. Select Metal 选择金属</h4>
+                    <div style={styles.grid}>
+                        {METALS.map((metal) => (
+                            <button
+                                key={metal.symbol}
+                                style={{
+                                    ...styles.metalButton,
+                                    ...(selectedMetal?.symbol === metal.symbol ? styles.metalButtonSelected : {}),
+                                }}
+                                onClick={() => {
+                                    setSelectedMetal(metal);
+                                    setIsReacting(false);
+                                    setShowResult(false);
+                                    setBubbles(false);
+                                    setMetalDropped(false);
+                                    setMetalDissolved(false);
+                                }}
+                            >
+                                <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>{metal.symbol}</div>
+                                <div style={{ fontSize: '0.7rem' }}>{metal.name}</div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Reagent Selection */}
+                <div style={styles.section}>
+                    <h4 style={styles.sectionTitle}>2. Select Reagent 选择试剂</h4>
+                    <div style={styles.reagentGrid}>
+                        {REAGENTS.map((reagent) => (
+                            <button
+                                key={reagent.id}
+                                style={{
+                                    ...styles.reagentButton,
+                                    ...(selectedReagent?.id === reagent.id ? styles.reagentButtonSelected : {}),
+                                }}
+                                onClick={() => {
+                                    setSelectedReagent(reagent);
+                                    setIsReacting(false);
+                                    setShowResult(false);
+                                    setBubbles(false);
+                                    setMetalDropped(false);
+                                    setMetalDissolved(false);
+                                }}
+                            >
+                                <span style={styles.reagentIcon}>{reagent.icon}</span>
+                                <div>
+                                    <div style={{ fontWeight: 'bold' }}>{reagent.name}</div>
+                                    <div style={{ fontSize: '0.8rem', opacity: 0.8 }}>{reagent.chinese}</div>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Experiment Area */}
+                <div style={styles.experimentArea}>
+                    <div style={styles.beakerWrapper}>
+                        <div style={styles.beaker}>
+                            <div style={styles.liquid} />
+                        </div>
+                        {selectedMetal && (
+                            <div style={{
+                                ...styles.metalSample,
+                                transition: metalDropped 
+                                    ? 'top 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease 1s' 
+                                    : 'top 0.3s ease-out, opacity 0.3s ease',
+                            }} />
+                        )}
+                        {renderBubbles()}
+                        {explosion && <div style={styles.explosion} />}
+                        {/* Steam effect */}
+                        {selectedReagent?.id === 'steam' && (
+                            <div style={styles.steamEffect}>
+                                <div className="steam-wisp" style={{ left: '20%', animationDelay: '0s' }} />
+                                <div className="steam-wisp" style={{ left: '50%', animationDelay: '0.3s' }} />
+                                <div className="steam-wisp" style={{ left: '80%', animationDelay: '0.6s' }} />
                             </div>
+                        )}
+                    </div>
+
+                    {!isReacting ? (
+                        <button
+                            style={styles.actionButton}
+                            disabled={!selectedMetal || !selectedReagent}
+                            onClick={startExperiment}
+                        >
+                            Start Experiment 开始实验
                         </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Experiment Area */}
-            <div style={styles.experimentArea}>
-                <div style={styles.beakerWrapper}>
-                    <div style={styles.beaker}>
-                        <div style={styles.liquid} />
-                    </div>
-                    {selectedMetal && (
-                        <div style={{
-                            ...styles.metalSample,
-                            transition: metalDropped 
-                                ? 'top 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease 1s' 
-                                : 'top 0.3s ease-out, opacity 0.3s ease',
-                        }} />
+                    ) : (
+                        <button style={styles.resetButton} onClick={reset}>
+                            Reset 重置
+                        </button>
                     )}
-                    {renderBubbles()}
-                    {explosion && <div style={styles.explosion} />}
-                    {/* Steam effect */}
-                    {selectedReagent?.id === 'steam' && (
-                        <div style={styles.steamEffect}>
-                            <div className="steam-wisp" style={{ left: '20%', animationDelay: '0s' }} />
-                            <div className="steam-wisp" style={{ left: '50%', animationDelay: '0.3s' }} />
-                            <div className="steam-wisp" style={{ left: '80%', animationDelay: '0.6s' }} />
+                    
+                    {/* Result Overlay over experimentArea */}
+                    {showResult && reaction && (
+                        <div style={styles.resultOverlay} onClick={() => setShowResult(false)}>
+                            <h4 style={styles.overlayTitle}>
+                                {reaction.explosive ? '💥 ' : reaction.equation === '\\text{No reaction}' ? '❌ ' : '✅ '}
+                                Reaction Result 反应结果
+                            </h4>
+                            <p style={styles.overlayDescription}>
+                                {reaction.description}<br/>
+                                {reaction.chineseDesc}
+                            </p>
+                            <div style={styles.overlayEquation}>
+                                <BlockMath>{reaction.equation}</BlockMath>
+                            </div>
                         </div>
                     )}
                 </div>
 
-                {!isReacting ? (
-                    <button
-                        style={styles.actionButton}
-                        disabled={!selectedMetal || !selectedReagent}
-                        onClick={startExperiment}
-                    >
-                        Start Experiment 开始实验
-                    </button>
-                ) : (
-                    <button style={styles.resetButton} onClick={reset}>
-                        Reset 重置
-                    </button>
-                )}
-                
-                {/* Result Overlay over experimentArea */}
-                {showResult && reaction && (
-                    <div style={styles.resultOverlay} onClick={() => setShowResult(false)}>
-                        <h4 style={styles.overlayTitle}>
-                            {reaction.explosive ? '💥 ' : reaction.equation === '\\text{No reaction}' ? '❌ ' : '✅ '}
-                            Reaction Result 反应结果
-                        </h4>
-                        <p style={styles.overlayDescription}>
-                            {reaction.description}<br/>
-                            {reaction.chineseDesc}
-                        </p>
-                        <div style={styles.overlayEquation}>
-                            <BlockMath>{reaction.equation}</BlockMath>
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            {/* Reaction Table */}
-            <div style={{marginTop: '2rem', overflowX: 'auto'}}>
-                <h4 style={{...styles.sectionTitle, marginTop: '1.5rem', marginBottom: '0.75rem'}}>
-                    📊 Reactivity Summary Table 反应性总结表
-                </h4>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Element</th>
-                            <th>Cold Water</th>
-                            <th>Steam</th>
-                            <th>Acid</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Potassium</td>
-                            <td>Reacts very violently</td>
-                            <td rowSpan="3">Reacts explosively</td>
-                            <td rowSpan="2">Reacts explosively</td>
-                        </tr>
-                        <tr>
-                            <td>Sodium</td>
-                            <td>Reacts violently</td>
-                        </tr>
-                        <tr>
-                            <td>Calcium</td>
-                            <td>Reacts readily</td>
-                            <td>Reacts violently</td>
-                        </tr>
-                        <tr>
-                            <td>Magnesium</td>
-                            <td>Reacts very slowly</td>
-                            <td rowSpan="2">Reacts violently</td>
-                            <td rowSpan="2">Reacts rapidly</td>
-                        </tr>
-                        <tr>
-                            <td>Zinc</td>
-                            <td>N/A</td>
-                        </tr>
-                        <tr>
-                            <td>Iron</td>
-                            <td>N/A</td>
-                            <td>Reacts slowly</td>
-                            <td>Reacts slowly</td>
-                        </tr>
-                        <tr>
-                            <td>Lead</td>
-                            <td>N/A</td>
-                            <td>N/A</td>
-                            <td>Reacts with HNO₃ only</td>
-                        </tr>
-                        <tr>
-                            <td>Copper - Silver</td>
-                            <td>N/A</td>
-                            <td>N/A</td>
-                            <td>N/A</td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
 
             <style>{`
