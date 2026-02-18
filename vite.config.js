@@ -19,4 +19,17 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 800,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Separate KaTeX into its own chunk
+          'katex-vendor': ['katex', 'react-katex'],
+          // Chemistry pages chunk
+          'chemistry': ['./src/pages/Chemistry/12-ReactivitySeries.jsx'],
+        },
+      },
+    },
+  },
 })

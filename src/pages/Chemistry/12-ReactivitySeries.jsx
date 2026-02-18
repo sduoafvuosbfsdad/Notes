@@ -1,7 +1,6 @@
 import Template from '@/pages/Template';
 import GlassContainer from "@/components/GlassContainer.jsx";
-import Latex from "@/components/Latex.jsx";
-import BlockMath from "@/components/BlockMath.jsx";
+import { BlockMath } from "@/components/LazyMath.jsx";
 import ReactivityExperiment from "@/components/ReactivityExperiment.jsx";
 
 // Metal data for reference (static rendering below)
@@ -107,7 +106,7 @@ const styles = {
     },
     thresholdLabel: {
         position: 'absolute',
-        top: '-24px',
+        top: '-42px',
         fontSize: '0.7rem',
         color: '#feca57',
         fontWeight: 'bold',
@@ -175,7 +174,7 @@ export default function ReactivitySeries() {
                             {/* Steam Reaction Threshold */}
                             <div style={styles.thresholdContainer}>
                                 <div style={styles.thresholdLine}></div>
-                                <div style={styles.thresholdLabel}>Steam reaction threshold</div>
+                                <div style={styles.thresholdLabel}>Steam reaction threshold<br/>蒸汽反应阈值</div>
                             </div>
                             {/* Lead */}
                             <div style={styles.metalItem}>
@@ -201,7 +200,7 @@ export default function ReactivitySeries() {
                         <div style={styles.arrowContainer}>
                             <div style={styles.arrowLine}></div>
                             <div style={styles.arrowHead}></div>
-                            <span style={styles.arrowLabel}>Decreasing Reactivity 活动性递减</span>
+                            <span style={styles.arrowLabel}>Decreasing Reactivity 活动性递减 →</span>
                         </div>
                     </div>
 
@@ -214,19 +213,21 @@ export default function ReactivitySeries() {
                                 Metals + Cold water 金属 + 冷水
                                 <div id="Reaction-of-metals-with-cold-water">
                                     <BlockMath>Na(s) + H_2O(l) → NaOH(aq) + H_2(g)</BlockMath>
-                                    <span>Metals more reactive than carbon</span>
+                                    <span>Metals more reactive than carbon 比碳更活泼的金属</span>
                                 </div>
                             </li>
                             <li>
                                 Metal + Steam 金属 + 蒸汽
                                 <div id="Reaction-of-metals-with-steam">
                                     <BlockMath>Zn(s) + H_2O(g) → ZnO(s) + H_2(g)</BlockMath>
+                                    <span>Metals from Magnesium to Zinc 从镁到锌的金属</span>
                                 </div>
                             </li>
                             <li>
                                 Metals + Acid 金属 + 酸
                                 <div id="Reaction-of-metals-with-acid">
                                     <BlockMath>Fe(s) + HCl(aq) → FeCl_2(s) + H_2(g)</BlockMath>
+                                    <span>Metals more reactive than hydrogen 比氢更活泼的金属</span>
                                 </div>
                             </li>
                         </ol>
@@ -235,7 +236,8 @@ export default function ReactivitySeries() {
                 <div id="12.2">
                     <h2>12.2 Impact of reactivity of metals on oxidisation 金属活动性对于氧化反应烈度的影响</h2>
                     <p>
-                        The higher the metal is in the reactivity series, the more reactive it is, therefore it reacts more vigorously.=
+                        The higher the metal is in the reactivity series, the more reactive it is, therefore it reacts more vigorously.
+                        金属在活动性顺序中的位置越高，活动性就越强，因此反应越剧烈。
                     </p>
                     <ReactivityExperiment />
                     
@@ -244,55 +246,55 @@ export default function ReactivitySeries() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Element</th>
-                                    <th>Cold Water</th>
-                                    <th>Steam</th>
-                                    <th>Acid</th>
+                                    <th>Element 元素</th>
+                                    <th>Cold Water 冷水</th>
+                                    <th>Steam 蒸汽</th>
+                                    <th>Acid 酸</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Potassium</td>
-                                    <td>Reacts very violently</td>
-                                    <td rowSpan="3">Reacts explosively</td>
-                                    <td rowSpan="2">Reacts explosively</td>
+                                    <td>Potassium 钾</td>
+                                    <td>Reacts very violently<br/>反应非常剧烈</td>
+                                    <td rowSpan="3">Reacts explosively<br/>爆炸性反应</td>
+                                    <td rowSpan="2">Reacts explosively<br/>爆炸性反应</td>
                                 </tr>
                                 <tr>
-                                    <td>Sodium</td>
-                                    <td>Reacts violently</td>
+                                    <td>Sodium 钠</td>
+                                    <td>Reacts violently<br/>剧烈反应</td>
                                 </tr>
                                 <tr>
-                                    <td>Calcium</td>
-                                    <td>Reacts readily</td>
-                                    <td>Reacts violently</td>
+                                    <td>Calcium 钙</td>
+                                    <td>Reacts readily<br/>容易反应</td>
+                                    <td>Reacts violently<br/>剧烈反应</td>
                                 </tr>
                                 <tr>
-                                    <td>Magnesium</td>
-                                    <td>Reacts very slowly</td>
-                                    <td rowSpan="2">Reacts violently</td>
-                                    <td rowSpan="2">Reacts rapidly</td>
+                                    <td>Magnesium 镁</td>
+                                    <td>Reacts very slowly<br/>反应很慢</td>
+                                    <td rowSpan="2">Reacts violently<br/>剧烈反应</td>
+                                    <td rowSpan="2">Reacts rapidly<br/>快速反应</td>
                                 </tr>
                                 <tr>
-                                    <td>Zinc</td>
-                                    <td>N/A</td>
+                                    <td>Zinc 锌</td>
+                                    <td>N/A<br/>无反应</td>
                                 </tr>
                                 <tr>
-                                    <td>Iron</td>
-                                    <td>N/A</td>
-                                    <td>Reacts slowly</td>
-                                    <td>Reacts slowly</td>
+                                    <td>Iron 铁</td>
+                                    <td>N/A<br/>无反应</td>
+                                    <td>Reacts slowly<br/>缓慢反应</td>
+                                    <td>Reacts slowly<br/>缓慢反应</td>
                                 </tr>
                                 <tr>
-                                    <td>Lead</td>
-                                    <td>N/A</td>
-                                    <td>N/A</td>
-                                    <td>Reacts with HNO₃ only</td>
+                                    <td>Lead 铅</td>
+                                    <td>N/A<br/>无反应</td>
+                                    <td>N/A<br/>无反应</td>
+                                    <td>Reacts with HNO₃ only<br/>仅与硝酸反应</td>
                                 </tr>
                                 <tr>
-                                    <td>Copper - Silver</td>
-                                    <td>N/A</td>
-                                    <td>N/A</td>
-                                    <td>N/A</td>
+                                    <td>Copper - Silver<br/>铜 - 银</td>
+                                    <td>N/A<br/>无反应</td>
+                                    <td>N/A<br/>无反应</td>
+                                    <td>N/A<br/>无反应</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -301,30 +303,32 @@ export default function ReactivitySeries() {
 
                 <div id="12.3">
                     <h2>12.3 Impact of reactivity of metals on the reduction of metal oxides 金属活动性对于还原氧化金属的影响</h2>
-                    <p>The more reactive a metal is, the more stable its compound is and the more difficult to reduce the metal oxide</p>
+                    <p>The more reactive a metal is, the more stable its compound is and the more difficult to reduce the metal oxide.
+                        金属越活泼，其化合物就越稳定，还原金属氧化物也就越困难。</p>
                     <div id="12.3.1">
                         <h3>12.3.1 Reduction of Metal Oxides with Carbon and Hydrogen</h3>
                         <p>
                             Carbon would reduce metal oxides that have a lower reactivity than carbon.
                             Hydrogen would reduce metal oxides that have a lower reactivity than Zinc.
                             Only Silver can be reduced by heating.
+                            碳可以还原比碳活动性低的金属氧化物。氢可以还原比锌活动性低的金属氧化物。只有银可以通过加热还原。
                         </p>
 
                         <ol>
                             <li>
-                                Reduction with carbon - Produces metal and oxygen
-                                <BlockMath>2ZnO(s) + C(s) → 2Zn(s) + O_2(g)</BlockMath>
+                                Reduction with carbon - Produces metal and carbon dioxide 用碳还原 - 产生金属和二氧化碳
+                                <BlockMath>2ZnO(s) + C(s) → 2Zn(s) + CO_2(g)</BlockMath>
                             </li>
                             <li>
-                                Reduction with hydrogen - Produces metal and hydrogen
+                                Reduction with hydrogen - Produces metal and water 用氢还原 - 产生金属和水
                                 <p>
                                     <BlockMath>CuO(s) + H_2(g) → Cu(s) + H_2O(g)</BlockMath>
                                 </p>
                             </li>
                             <li>
-                                Reduction by heating - Produces metal and oxygen
+                                Reduction by heating - Produces metal and oxygen 加热还原 - 产生金属和氧气
                                 <br/>
-                                <small className="red">Applies to Silver only!!!</small>
+                                <small className="red">Applies to Silver only!!! 仅适用于银！！！</small>
                                 <BlockMath>2Ag_2O(s) → 4Ag(s) + O_2(g)</BlockMath>
                             </li>
                         </ol>
@@ -342,38 +346,46 @@ export default function ReactivitySeries() {
                 </div>
 
                 <div id="12.4">
-                    <h2>12.4 Impact of reactivity of metals on the decomposition of carbonates</h2>
-                    <p>The more reactive a metal is, the more thermally stable its carbon is and therefore the more difficult to decompose it by heat.</p>
+                    <h2>12.4 Impact of reactivity of metals on the decomposition of carbonates 金属活动性对碳酸盐分解的影响</h2>
+                    <p>The more reactive a metal is, the more thermally stable its carbonate is and therefore the more difficult to decompose it by heat.
+                        金属越活泼，其碳酸盐的热稳定性就越高，因此越难通过加热分解。</p>
                     <BlockMath>CaCO_3(s) → CaO(s) + CO_2(g)</BlockMath>
-                    <span>Metal carbonates with metals that are less reactive than sodium would decompose under heating to form a metal oxide and carbon dioxide.</span>
+                    <span>Metal carbonates with metals that are less reactive than sodium would decompose under heating to form a metal oxide and carbon dioxide.
+                        含有比钠活动性低的金属的碳酸盐在加热下会分解成金属氧化物和二氧化碳。</span>
                     <BlockMath>2Ag_2CO_3(s) → 4Ag(s) + O_2(g) + 2CO_2(g)</BlockMath>
-                    <span>Due to how unreactive silver is, silver carbonate forms metal, oxygen and carbon dioxide during decomposition.</span>
+                    <span>Due to how unreactive silver is, silver carbonate forms metal, oxygen and carbon dioxide during decomposition.
+                        由于银非常不活泼，碳酸银在分解时形成金属、氧气和二氧化碳。</span>
                 </div>
 
                 <div id="12.5">
-                    <h2>12.5 Extraction of metals</h2>
+                    <h2>12.5 Extraction of metals 金属的提取</h2>
                     <p>
                         Metals do not exist purely. So, we need to extract them from their ores for industrial use.<br/>
                         There are usually 2 methods to do so.
+                        金属不以单质形式存在。因此，我们需要从矿石中提取它们以供工业使用。通常有两种方法。
                         <ol>
-                            <li>Electrolysis (Reactivity > Carbon)</li>
-                            <li>Reduction with Carbon (Reactivity {"<"} Carbon)</li>
+                            <li>Electrolysis (Reactivity > Carbon) 电解法（活动性 {'>'} 碳）</li>
+                            <li>Reduction with Carbon (Reactivity {'<'} Carbon) 碳还原法（活动性 {'<'} 碳）</li>
                         </ol>
                     </p>
                 </div>
 
                 <div id="12.6">
-                    <h2>12.6 Rusting</h2>
-                    <p>Rusting usually refers to the corrosion of iron over time. It is due to iron oxidising when exposed to oxygen and water.</p>
+                    <h2>12.6 Rusting 生锈</h2>
+                    <p>Rusting usually refers to the corrosion of iron over time. It is due to iron oxidising when exposed to oxygen and water.
+                        生锈通常指铁随时间的腐蚀。这是由于铁暴露在氧气和水中时发生氧化。</p>
                     <div id="12.6.1">
-                        <h3>12.6.1 Rust prevention methods</h3>
-                        <p>There are two common rust prevention methods, using a protective layer and sacrificial protection.</p>
+                        <h3>12.6.1 Rust prevention methods 防锈方法</h3>
+                        <p>There are two common rust prevention methods, using a protective layer and sacrificial protection.
+                            有两种常见的防锈方法：使用保护层和牺牲性保护。</p>
                         <ol>
-                            <li>Using a protective layer</li>
+                            <li>Using a protective layer 使用保护层</li>
                             A protective layer refers to a barrier to prevent iron/steel in coming into contact with oxygen and water.
-                            The protective layers can be created through panting, oiling, plastic coating and electroplating.
-                            <li>Sacrificial protection</li>
+                            The protective layers can be created through painting, oiling, plastic coating and electroplating.
+                            保护层是指阻止铁/钢与氧气和水接触的屏障。保护层可以通过喷漆、涂油、塑料涂层和电镀来形成。
+                            <li>Sacrificial protection 牺牲性保护</li>
                             This method involves placing a more reactive metal to oxidise first, protecting the less reactive metal.
+                            这种方法涉及放置一种更活泼的金属先氧化，从而保护较不活泼的金属。
                         </ol>
 
                     </div>

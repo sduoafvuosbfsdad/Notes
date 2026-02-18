@@ -1,5 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import BlockMath from './BlockMath';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+
+// Lazy load BlockMath to reduce initial bundle size
+const BlockMath = lazy(() => import('./BlockMath.jsx'));
 
 const METALS = [
     { symbol: 'K', name: 'Potassium', chinese: '钾', reactivity: 'very_high' },
@@ -724,7 +726,9 @@ export default function ReactivityExperiment() {
                                 {reaction.chineseDesc}
                             </p>
                             <div style={styles.overlayEquation}>
-                                <BlockMath>{reaction.equation}</BlockMath>
+                                <Suspense fallback={<span style={{color: 'rgba(255,255,255,0.5)'}}>...</span>}>
+                                    <BlockMath>{reaction.equation}</BlockMath>
+                                </Suspense>
                             </div>
                         </div>
                     )}
