@@ -256,7 +256,7 @@ export default function ReactivitySeries() {
                                 <tr>
                                     <td>Potassium 钾</td>
                                     <td>Reacts very violently<br/>反应非常剧烈</td>
-                                    <td rowSpan="3">Reacts explosively<br/>爆炸性反应</td>
+                                    <td rowSpan="2">Reacts explosively<br/>爆炸性反应</td>
                                     <td rowSpan="2">Reacts explosively<br/>爆炸性反应</td>
                                 </tr>
                                 <tr>
@@ -267,16 +267,19 @@ export default function ReactivitySeries() {
                                     <td>Calcium 钙</td>
                                     <td>Reacts readily<br/>容易反应</td>
                                     <td>Reacts violently<br/>剧烈反应</td>
+                                    <td>Reacts violently<br/>剧烈反应</td>
                                 </tr>
                                 <tr>
                                     <td>Magnesium 镁</td>
                                     <td>Reacts very slowly<br/>反应很慢</td>
-                                    <td rowSpan="2">Reacts violently<br/>剧烈反应</td>
-                                    <td rowSpan="2">Reacts rapidly<br/>快速反应</td>
+                                    <td>Reacts violently<br/>剧烈反应</td>
+                                    <td>Reacts rapidly<br/>快速反应</td>
                                 </tr>
                                 <tr>
                                     <td>Zinc 锌</td>
                                     <td>N/A<br/>无反应</td>
+                                    <td>Reacts readily<br/>容易反应</td>
+                                    <td>Reacts moderately fast<br/>反应适中</td>
                                 </tr>
                                 <tr>
                                     <td>Iron 铁</td>
@@ -337,10 +340,10 @@ export default function ReactivitySeries() {
                     <div id="12.3.2">
                         <h3>12.3.2 Metal displacement reactions 金属置换反应</h3>
                         <p>A more reactive metal displaces another metal from its compound. 活动性较强的金属能把活动性较弱的金属从其盐溶液中置换出来。</p>
-                        <BlockMath>Zn(s) + CuO(s) → ZnO(s) + Cu(s)</BlockMath>
+                        <BlockMath>Zn(s) + CuSO_4(aq) → ZnSO_4(aq) + Cu(s)</BlockMath>
                         <p>
-                            During the reaction, the copper from copper oxide is reduced to form copper metal.
-                            Therefore, the Zinc is acting as the reducent agent here.
+                            During the reaction, the copper ions from copper(II) sulfate solution are reduced to form copper metal.
+                            Therefore, the Zinc is acting as the reducing agent here.
                         </p>
                     </div>
                 </div>
